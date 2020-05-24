@@ -12,13 +12,13 @@ import android.widget.TextView
  * Created date:  2019-06-26.
  * mail:2280885690@qq.com
  */
-class CustomAdapter(list: ArrayList<String>) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+class CustomAdapter(list: ArrayList<String>,public val listener:(Int)->Unit) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     private val mList = list
 
     override fun onCreateViewHolder(h: ViewGroup, p: Int): RecyclerView.ViewHolder {
         val view = LayoutInflater.from(h.context).inflate(R.layout.item_list, h, false);
-        return MyViewHolder(view)
+        return MyViewHolder(view,listener)
     }
 
     override fun getItemCount(): Int {
@@ -28,12 +28,19 @@ class CustomAdapter(list: ArrayList<String>) : RecyclerView.Adapter<RecyclerView
     override fun onBindViewHolder(h: RecyclerView.ViewHolder, p: Int) {
         if (h is MyViewHolder) {
             h.tvText.text = mList[p]
+            h.bind()
         }
     }
 
 
-    class MyViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+    class MyViewHolder(itemView: View,val listener: (Int) -> Unit) : RecyclerView.ViewHolder(itemView) {
         val tvText: TextView = itemView.findViewById<TextView>(R.id.tv)
+
+        fun bind(){
+            tvText.setOnClickListener {
+                listener(position)
+            }
+        }
     }
 
 
